@@ -154,10 +154,10 @@ GROUP BY d.dept_name;
 
 
 SELECT 
-	CONCAT(e.first_name, ' ', e.last_name) AS `Employee Name`,
+	CONCAT(e.first_name, ' ', e.last_name) AS "Employee Name",
 	d.dept_name AS "Department Name",
 	s.salary AS "Salary"
-FROM `employees` e
+FROM employees e
 JOIN dept_emp de ON de.`emp_no` = e.`emp_no`
 JOIN departments d ON de.`dept_no` = d.`dept_no`
 JOIN salaries s	ON de.`emp_no` = s.`emp_no`
@@ -174,5 +174,19 @@ JOIN (
 		AND maxSals.d_name = d.dept_name
 WHERE de.`to_date` LIKE '9999%'
 	AND s.`to_date` LIKE '9999%'
-ORDER BY `Department Name`;
+ORDER BY `Department Name`
+;
 
+
+SELECT 
+FROM 
+	SELECT sal.dept_name AS "Department", MAX(sal.salary) AS max_salary
+	FROM (
+		SELECT de.emp_no, d.dept_name, s.salary
+		FROM dept_emp de
+		JOIN salaries s ON s.emp_no = de.emp_no
+		JOIN departments d ON d.dept_no = de.dept_no
+		WHERE s.to_date > now() AND de.to_date > now()
+		) sal
+	GROUP BY sal.dept_name
+;
